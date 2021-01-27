@@ -1,0 +1,31 @@
+.filterStatus{
+    margin-top: 10px;
+    height: 10px;
+}
+
+.selectStatus{
+    border-radius: 5px;
+    height: 30px;
+    margin-right: 3px;
+    background-color: grey;
+}
+
+.date{
+    font-weight: 700;
+    margin-left: 10%;
+}
+
+.filter{
+    display: flex;
+    flex-direction: row;
+}
+
+.sDate,.eDate,.select{
+    flex:1;
+    margin-top: 8px;
+
+}
+.startDate,.endDate{
+    background-color: grey;
+    border-radius: 5px;
+}
