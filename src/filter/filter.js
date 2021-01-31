@@ -10,7 +10,7 @@ import {connect} from 'react-redux';
     return(<div className='filter'>
         <div className='select'>
         <select name="status" className="selectStatus" onChange={(e)=> filterItems({items: items, status: e.target.value, startDate, endDate }) }>
-            <option value="select">Select Status</option>
+            <option value="select"selected="true" disabled="disabled">Select Status</option>
             <option value="true">Upcoming Launches</option>
             <option value="false">Past Launches</option>
         </select>
