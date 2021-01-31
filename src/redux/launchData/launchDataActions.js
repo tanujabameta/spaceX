@@ -2,9 +2,7 @@
     FETCH_LAUNCHDATA_REQUEST,
     FETCH_LAUNCHDATA_SUCCESS,
     FETCH_LAUNCHDATA_FAILURE,
-    FILTER_BY_STATUS,
-    FILTER_BY_START_DATE,
-    FILTER_BY_END_DATE
+    FILTER
  } from './launchDataType'; 
 
  import axios from 'axios'; 
@@ -30,18 +28,6 @@ export const fetchLaunchDataFailure=(error)=>{
     }
 } 
 
-// export const filterByStatusRequest =(data, status)=>{
-//     return{
-//         type: FILTER_BY_STATUS,
-//         payload: {
-//             status:status,
-//             items: status==='select'?data: data.filter((data)=>{
-//                 return(String(data["upcoming"])=== status);
-//             }) 
-//         }
-//     }
-// } 
-
 export const fetchLaunchData = () =>{
     return (dispatch)=>{
         dispatch(fetchLaunchDataRequest);
@@ -57,50 +43,40 @@ export const fetchLaunchData = () =>{
     }
 }
 
- function filterData1(filterData) {
-    const { data, status} = filterData;
+ function filterData(filterData) {
+    const { data, status, startDate, endDate} = filterData;
+    const payload = { data };
+    if( status) payload['status'] = status;
+    if( startDate ) payload['startDate'] = startDate;
+    if( endDate ) payload['endDate'] = endDate;
     return {
-        type: FILTER_BY_STATUS,
-        payload: { data, status}
-    }
-
-}
-function filterData2(filterData) {
-    const { data, startDate} = filterData;
-    return {
-        type: FILTER_BY_START_DATE,
-        payload: { data, startDate}
+        type: FILTER,
+        payload
     }
 }
 
-function filterData3(filterData) {
-    const { data, endDate} = filterData;
-    return {
-        type: FILTER_BY_END_DATE,
-        payload: { data, endDate}
+export const filterItems = (newFilterData) => (dispatch) => {
+    const {items, status, startDate, endDate} = newFilterData;
+    let newData = [...items];
+    if(status !== 'select') {
+        newData = items.filter((item)=>  String(item["upcoming"])=== status);
     }
+    console.log(startDate, status,  status !== "true") 
+    if(startDate &&   status !== "true") {
+        const startDateUnix = startDate.getTime()/1000;
+        console.log(startDateUnix, newData[0]["launch_date_unix"])
+        newData= newData.filter((item)=> startDateUnix < item["launch_date_unix"]);
+    } 
+    if(endDate &&   status !== "true") {
+        const endDateUnix = endDate.getTime()/1000;
+        newData= newData.filter((item)=> endDateUnix > item["launch_date_unix"]);
+    }
+    console.log(newData)
+
+    dispatch(filterData({data: newData, status, startDate, endDate}));
 }
 
 
-export const filterByStatus = (newFilterData) => (dispatch) => {
-    const {items, status} = newFilterData;
-    const newData = status === 'select'? items: items.filter((item)=>  String(item["upcoming"])=== status);
-    dispatch(filterData1({data: newData, status}));
-}
-
- export const filterByStartDate = (newFilterData) => (dispatch) => {
-    const {items, startDate} = newFilterData;
-    let startDateUnix = startDate.getTime()/1000;
-    const newData= items.filter((item)=>(startDateUnix < item["launch_date_unix"]));
-    dispatch(filterData2({data: newData, startDate}));
- }
-
- export const filterByEndDate = (newFilterData) => (dispatch) => {
-    const {items, endDate} = newFilterData;
-    let endDateUnix = endDate.getTime()/1000;
-    const newData= items.filter((item)=>(endDateUnix > item["launch_date_unix"]));
-    dispatch(filterData3({data: newData, endDate}));
- }
 
 
 

@@ -2,9 +2,7 @@ import {
     FETCH_LAUNCHDATA_REQUEST,
     FETCH_LAUNCHDATA_SUCCESS,
     FETCH_LAUNCHDATA_FAILURE,
-    FILTER_BY_STATUS,
-    FILTER_BY_START_DATE,
-    FILTER_BY_END_DATE
+    FILTER
  } from './launchDataType'; 
 
 const initialState = {
@@ -39,24 +37,18 @@ export default function reducer(state = initialState, action)  {
                 filteredItems:[],
                 error: action.payload
             }
-        case FILTER_BY_STATUS:
+        case FILTER:
+            const filterPayload = action.payload;
+            const { data, status, startDate, endDate} = filterPayload;
+            const payload = { filteredItems: [...data] };
+            if( status) payload['status'] = status;
+            if( startDate) payload['startDate'] = startDate;
+            if( endDate) payload['endDate'] = endDate;
             return {
                 ...state,
-                filteredItems: [...action.payload.data],
-                status: action.payload.status
+                ...payload
             }
-        case FILTER_BY_START_DATE:
-            return {
-                    ...state,
-                    filteredItems: [...action.payload.data],
-                    startDate: action.payload.startDate,
-                }
-        case FILTER_BY_END_DATE:
-            return {
-                     ...state,
-                    filteredItems: [...action.payload.data],
-                    endDate: action.payload.endDate,
-                    }
+        
         default: return state
     }
 }
