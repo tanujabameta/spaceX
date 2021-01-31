@@ -3,7 +3,7 @@ import  '../modal/style.css';
 const Modal = props=>{
     const {launchData} = props;
     return(
-        <div className="modal fade" id={`popup${launchData['flight_number']}`} tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div className="modal fade" id={`popup${launchData['flight_number']}`} tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
          <div className="modal-dialog modal-lg">
           <div className="modal-content">
             <div className="modal-header">
@@ -11,7 +11,7 @@ const Modal = props=>{
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div>
-                <img src={launchData["links"]["mission_patch_small"]} class="card-img-top image" alt="..."/>
+                <img src={launchData["links"]["mission_patch_small"]} className="card-img-top image" alt="..."/>
             </div>
             <div className="modal-body row">
               <div className="col-sm-3">
